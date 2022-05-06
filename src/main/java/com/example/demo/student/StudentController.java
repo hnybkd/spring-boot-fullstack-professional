@@ -11,10 +11,10 @@ import java.util.List;
 
 
 @RestController
+@CrossOrigin(origins="*")
 @RequestMapping(path = "api/v1/students")
 public class StudentController {
 
-    @CrossOrigin
     @GetMapping
     public List<Student> getAllStudents () {
         List<Student> students = Arrays.asList(
