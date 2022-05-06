@@ -1,6 +1,7 @@
 package com.example.demo.student;
 
 
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,14 +14,13 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins="*")
 @RequestMapping(path = "api/v1/students")
+@AllArgsConstructor
 public class StudentController {
+
+    private final StudentService studentService;
 
     @GetMapping
     public List<Student> getAllStudents () {
-        List<Student> students = Arrays.asList(
-                new Student(1L, "Kendra", "kendra@example.com", Gender.FEMALE),
-                new Student(2L, "Logan", "logan@example.com", Gender.MALE)
-        );
-        return students;
+        return studentService.getAllStudents();
     }
 }
