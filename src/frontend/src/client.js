@@ -21,6 +21,10 @@ export const addNewStudent = student =>
         },
         method: 'POST',
         body:JSON.stringify(student)
-    });
+    }).then(checkStatus)
+
+export const deleteStudent = studentId =>
+    fetch(`http://localhost:8080/api/v1/students/${studentId}`, {method: 'DELETE'})
+        .then(checkStatus)
 
 
