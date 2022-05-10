@@ -3,6 +3,7 @@ package com.example.demo.student;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Id;
 import java.util.List;
 
 @AllArgsConstructor
@@ -19,5 +20,9 @@ public class StudentService {
         //check if email is taken
         //throw error
         studentRepository.save(student);
+    }
+
+    public void deleteStudent(Long studentId) {
+        studentRepository.deleteById(studentId);
     }
 }

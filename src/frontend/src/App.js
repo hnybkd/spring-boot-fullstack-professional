@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getAllStudents } from "./client";
+import {deleteStudent, getAllStudents} from "./client";
 import {
     Layout,
     Menu,
@@ -11,6 +11,8 @@ import {
     Badge,
     Tag,
     Avatar,
+    Popconfirm,
+    Radio,
 } from 'antd';
 import {
     DesktopOutlined,
@@ -23,8 +25,8 @@ import {
 } from '@ant-design/icons';
 import StudentDrawerForm from "./StudentDrawerForm";
 
-
 import './App.css';
+import {successNotification} from "./Notification";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -41,7 +43,14 @@ const TheAvatar = ({name}) => {
     return <Avatar>{`${name.charAt(0)}${name.charAt(name.length - 1)}`}</Avatar>
 }
 
-const columns = [
+const removeStudent = (studentId, callback) => {
+    deleteStudent(studentId).then(() => {
+        successNotification("Student deleted", `Student with ${studentId} was deleted.`);
+        callback();
+    });
+}
+
+const columns = fetchStudents => [
     {
         title: '',
         dataIndex: 'avatar',
@@ -69,6 +78,23 @@ const columns = [
         dataIndex: 'gender',
         key: 'gender',
     },
+    {
+        title: 'Actions',
+        key: 'actions',
+        render: (text, student) =>
+            <Radio.Group>
+                <Popconfirm
+                    placement='topRight'
+                    title={`Are you sure to delete ${student.name}`}
+                    onConfirm={() => removeStudent(student.id, fetchStudents)}
+                    okText='Yes'
+                    cancelText='No'>
+                    <Radio.Button value="small">Delete</Radio.Button>
+                </Popconfirm>
+                <Radio.Button value="small">Edit</Radio.Button>
+            </Radio.Group>
+    }
+
 ];
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -108,7 +134,7 @@ function App() {
             />
             <Table
                 dataSource={students}
-                columns={columns}
+                columns={columns(fetchStudents)}
                 bordered
                 title={() =>
                     <>
